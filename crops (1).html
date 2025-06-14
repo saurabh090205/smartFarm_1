@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        #searchContainer {
+            margin-bottom: 20px;
+        }
+
+        #searchBar {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .crop {
+            padding: 15px;
+            border: 1px solid #ddd;
+            margin: 10px auto;
+            width: 80%;
+            text-align: left;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .crop h2 {
+            margin: 5px 0;
+            color: #333;
+        }
+
+        .crop p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .market-price {
+            font-style: italic;
+            color: green;
+        }
+
+         .website-links {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .website-links a {
+            color: #007BFF;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .website-links a:hover {
+            text-decoration: underline;
+        }
+
+        #reference {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <h1>Crop Information</h1>
+    <div id="searchContainer">
+        <input type="text" id="searchBar" placeholder="Search crops..." onkeyup="filterCrops()">
+    </div>
+    <div id="cropList"></div>
+
+    <p id="reference">
+        <strong>Reference:</strong> Information compiled from various agricultural resources and websites. Market prices are estimates and may vary.
+    </p>
+    <script>
+        const cropsData = [
+            {
+                "name": "Rice",
+                "growthTime": "120-150",
+                "climate": "Warm and humid",
+                "soilType": "Alluvial and clayey",
+                "waterRequirements": "High",
+                "marketPriceRef": ["https://agmarknet.gov.in/", "https://www.fci.gov.in/"],
+                "uses": "Staple food",
+                "states": ["West Bengal", "Uttar Pradesh", "Punjab", "Odisha", "Chhattisgarh"],
+                "terms": "Paddy, Kharif crop, Transplantation, Irrigation",
+                "marketPrice": 35,
+                "links": {
+                    "Government Web - FCI": "https://fci.gov.in/",
+                    "Private Web - BigBasket": "https://www.bigbasket.com/pc/staples/rice-rice-products/"
+                }
+            },
+            {
+                "name": "Wheat",
+                "growthTime": "120",
+                "climate": "Cool and dry",
+                "soilType": "Loamy",
+                "waterRequirements": "Medium",
+                "marketPriceRef": ["https://agmarknet.gov.in/", "https://www.fci.gov.in/"],
+                "uses": "Staple food",
+                "states": ["Uttar Pradesh", "Punjab", "Haryana", "Madhya Pradesh", "Rajasthan"],
+                "terms": "Rabi crop, Irrigation, Harvesting, Threshing",
+                "marketPrice": 28,
+                "links": {
+                    "Government Web - FCI": "https://fci.gov.in/",
+                    "Private Web - BigBasket": "https://www.bigbasket.com/pc/staples/atta-flours-sooji/"
+                }
+            },
+            {
+                "name": "Maize",
+                "growthTime": "90-120",
+                "climate": "Warm",
+                "soilType": "Well-drained loamy",
+                "waterRequirements": "Medium",
+                "marketPriceRef": ["https://agmarknet.gov.in/", "https://www.indiastat.com/"],
+                "uses": "Food, animal feed",
+                "states": ["Karnataka", "Madhya Pradesh", "Maharashtra", "Tamil Nadu", "Telangana"],
+                "terms": "Kharif crop, Silage, Stover, Kernel",
+                 "marketPrice": 22,
+                 "links": {
+                    "Private Web - Amazon": "https://www.amazon.in/s?k=maize"
+                }
+            },
+            {
+                "name": "Cotton",
+                "growthTime": "180-200",
+                "climate": "Warm and sunny",
+                "soilType": "Black soil",
+                "waterRequirements": "High",
+                "marketPriceRef": ["https://agmarknet.gov.in/", "https://www.cotcorp.org.in/"],
+                "uses": "Fiber",
+                "states": ["Gujarat", "Maharashtra", "Telangana", "Andhra Pradesh", "Haryana"],
+                "terms": "Kharif crop, Ginning, Boll, Fiber",
+                 "marketPrice": 60,
+                 "links": {
+                    "Private Web - IndiaMART": "https://www.indiamart.com/cotton/"
+                }
+            },
+            {
+                "name": "Sugarcane",
+                "growthTime": "300-365",
+                "climate": "Hot and humid",
+                "soilType": "Loamy",
+                "waterRequirements": "High",
+                "marketPriceRef": ["https://agmarknet.gov.in/", "https://www.indian sugarcane.nic.in/"],
+                "uses": "Sugar production",
+                "states": ["Uttar Pradesh", "Maharashtra", "Karnataka", "Tamil Nadu", "Gujarat"],
+                "terms": "ratooning, bagasse, jaggery, sucrose",
+                 "marketPrice": 3,
+                 "links": {
+                    "Private Web - Amazon": "https://www.amazon.in/s?k=sugarcane"
+                }
+            },
+            {
+                "name": "Tea",
+                "growthTime": "N/A",
+                "climate": "Cool and wet",
+                "soilType": "Well-drained acidic",
+                "waterRequirements": "High",
+                "marketPriceRef": ["https://www.teaboard.gov.in/", "https://agmarknet.gov.in/"],
+                "uses": "Beverage",
+                "states": ["Assam", "West Bengal", "Tamil Nadu", "Kerala"],
+                "terms": "plucking, fermentation, CTC, orthodox",
+                 "marketPrice": 200,
+                  "links": {
+                    "Government Web - Tea Board India": "https://www.teaboard.gov.in/",
+                    "Private Web - Tata Tea": "https://www.tatatea.com/"
+                }
+            },
+            {
+                "name": "Coffee",
+                "growthTime": "N/A",
+                "climate": "Warm and wet",
+                "soilType": "Well-drained loamy",
+                "waterRequirements": "Medium",
+                "marketPriceRef": ["https://www.indiacoffee.org/", "https://agmarknet.gov.in/"],
+                "uses": "Beverage",
+                "states": ["Karnataka", "Kerala", "Tamil Nadu", "Andhra Pradesh", "Odisha"],
+                "terms": "arabica, robusta, pulping, roasting",
+                 "marketPrice": 150,
+                 "links": {
+                    "Government Web - India Coffee Board": "https://www.indiacoffee.org/",
+                    "Private Web - Starbucks": "https://www.starbucks.in/"
+                }
+            },
+            {
+                "name": "Rubber",
+                "growthTime": "N/A",
+                "climate": "Hot and humid",
+                "soilType": "Laterite",
+                "waterRequirements": "High",
+                "marketPriceRef": ["http://rubberboard.org.in", "http://agmarknet.gov.in"],
+                "uses": "Industrial",
+                "states": ["Kerala", "Tamil Nadu", "Karnataka", "Tripura", "Assam"],
+                "terms": "latex, tapping, vulcanization, sheet rubber",
+                 "marketPrice": 180,
+                 "links": {
+                     "Government Web - Rubber Board India": "http://rubberboard.org.in",
+                     "Private Web - IndiaMART": "https://www.indiamart.com/rubber/"
+                 }
+            },
+            {
+                "name": "Jute",
+                "growthTime": "120",
+                "climate": "Warm and humid",
+                "soilType": "Alluvial",
+                "waterRequirements": "High",
+                "marketPriceRef": ["http://jute.com", "http://agmarknet.gov.in"],
+                "uses": "Fiber",
+                "states": ["West Bengal", "Bihar", "Assam", "Odisha", "Meghalaya"],
+                "terms": "retting, fiber extraction, baling, hessian",
+                 "marketPrice": 80,
+                 "links": {
+                     "Private Web - Amazon": "https://www.amazon.in/s?k=jute+products"
+                 }
+            },
+            {
+                "name": "Groundnut",
+                "growthTime": "120-150",
+                "climate": "Warm and dry",
+                "soilType": "Sandy loamy",
+                "waterRequirements": "Medium",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://msamb.com"],
+                "uses": "Oilseed, snacks",
+                "states": ["Gujarat", "Rajasthan", "Tamil Nadu", "Andhra Pradesh", "Karnataka"],
+                "terms": "pegging, curing, oil extraction, aflatoxin",
+                 "marketPrice": 70,
+                 "links": {
+                     "Private Web - BigBasket": "https://www.bigbasket.com/pc/snacks-branded-foods/nuts-seeds/groundnuts-peanuts/"
+                 }
+            },
+            {
+                "name": "Pulses (General)",
+                "growthTime": "90-120",
+                "climate": "Varies",
+                "soilType": "Well-drained loamy",
+                "waterRequirements": "Low",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://eagri.dac.gov.in"],
+                "uses": "Protein source",
+                "states": ["Madhya Pradesh", "Rajasthan", "Maharashtra", "Uttar Pradesh", "Karnataka"],
+                "terms": "legumes, nitrogen fixation, dal, protein",
+                 "marketPrice": 90,
+                 "links": {
+                     "Private Web - BigBasket": "https://www.bigbasket.com/pc/staples/dals-pulses/"
+                 }
+            },
+            {
+                "name": "Tur/Arhar (Pigeon Pea)",
+                "growthTime": "150-180",
+                "climate": "Warm and semi-arid",
+                "soilType": "Well-drained loamy",
+                "waterRequirements": "Low",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://msamb.com"],
+                "uses": "Dal",
+                "states": ["Maharashtra", "Karnataka", "Madhya Pradesh", "Uttar Pradesh", "Gujarat"],
+                "terms": "kharif crop, dal, arhar, pulses",
+                 "marketPrice": 85,
+                 "links": {
+                     "Private Web - BigBasket": "https://www.bigbasket.com/pd/20000457/bb-royal-arhar-dal-toor-dal-500-gm/"
+                 }
+            },
+            {
+                "name": "Urad (Black Gram)",
+                "growthTime": "90-120",
+                "climate": "Warm and humid",
+                "soilType": "Well-drained loamy",
+                "waterRequirements": "Low",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://eagri.dac.gov.in"],
+                "uses": "Dal",
+                "states": ["Madhya Pradesh", "Uttar Pradesh", "Maharashtra", "Andhra Pradesh", "Tamil Nadu"],
+                "terms": "Kharif & Rabi, Black Matpe, Protein-Rich",
+                 "marketPrice": 95,
+                 "links": {
+                     "Private Web - BigBasket": "https://www.bigbasket.com/pd/20000469/bb-royal-urad-dal-500-gm/"
+                 }
+            },
+            {
+                "name": "Moong (Green Gram)",
+                "growthTime": "60-90",
+                "climate": "Warm and dry",
+                "soilType": "Well-drained loamy",
+                "waterRequirements": "Low",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://msamb.com"],
+                "uses": "Dal",
+                "states": ["Rajasthan", "Maharashtra", "Andhra Pradesh", "Karnataka", "Odisha"],
+                "terms": "Short duration, Summer crop, Easy to digest",
+                 "marketPrice": 100,
+                 "links": {
+                     "Private Web - BigBasket": "https://www.bigbasket.com/pd/20000463/bb-royal-moong-dal-500-gm/"
+                 }
+            },
+            {
+                "name": "Masur (Lentil)",
+                "growthTime": "100-120",
+                "climate": "Cool and dry",
+                "soilType": "Loamy",
+                "waterRequirements": "Low",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://eagri.dac.gov.in"],
+                "uses": "Dal",
+                "states": ["Uttar Pradesh", "Madhya Pradesh", "Bihar", "West Bengal", "Rajasthan"],
+                "terms": "Rabi crop, Rich in Iron, Lentil Soup",
+                 "marketPrice": 75,
+                 "links": {
+                     "Private Web - BigBasket": "https://www.bigbasket.com/pd/20000460/bb-royal-masoor-dal-500-gm/"
+                 }
+            },
+            {
+                "name": "Gram (Chickpea)",
+                "growthTime": "90-120",
+                "climate": "Cool and dry",
+                "soilType": "Loamy",
+                "waterRequirements": "Low",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://msamb.com"],
+                "uses": "Dal, flour",
+                "states": ["Madhya Pradesh", "Rajasthan", "Maharashtra", "Uttar Pradesh", "Haryana"],
+                "terms": "Rabi crop, Chana, Besan, Protein source",
+                 "marketPrice": 80,
+                 "links": {
+                     "Private Web - BigBasket": "https://www.bigbasket.com/pd/20000454/bb-royal-chana-dal-500-gm/"
+                 }
+            },
+            {
+                "name": "Rapeseed & Mustard",
+                "growthTime": "120-150",
+                "climate": "Cool and dry",
+                "soilType": "Loamy",
+                "waterRequirements": "Low",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://eagri.dac.gov.in"],
+                "uses": "Oilseed",
+                "states": ["Rajasthan", "Haryana", "Madhya Pradesh", "Uttar Pradesh", "West Bengal"],
+                "terms": "Rabi crop, Oil extraction, Mustard oil, Glucosinolates",
+                 "marketPrice": 65,
+                 "links": {
+                     "Private Web - Amazon": "https://www.amazon.in/s?k=mustard+oil"
+                 }
+            },
+            {
+                "name": "Soybean",
+                "growthTime": "100-120",
+                "climate": "Warm and moist",
+                "soilType": "Well-drained loamy",
+                "waterRequirements": "Medium",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://msamb.com"],
+                "uses": "Oilseed, protein source",
+                "states": ["Madhya Pradesh", "Maharashtra", "Rajasthan", "Karnataka", "Andhra Pradesh"],
+                "terms": "Kharif crop, Lecithin, textured vegetable protein (TVP)",
+                 "marketPrice": 70,
+                 "links": {
+                     "Private Web - Amazon": "https://www.amazon.in/s?k=soybean"
+                 }
+            },
+            {
+                "name": "Sunflower",
+                "growthTime": "80-120",
+                "climate": "Warm and sunny",
+                "soilType": "Well-drained loamy",
+                "waterRequirements": "Medium",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://eagri.dac.gov.in"],
+                "uses": "Oilseed",
+                "states": ["Karnataka", "Andhra Pradesh", "Maharashtra", "Haryana", "Punjab"],
+                "terms": "Helianthus annuus, Oil extraction, Birdseed",
+                 "marketPrice": 55,
+                 "links": {
+                     "Private Web - Amazon": "https://www.amazon.in/s?k=sunflower+oil"
+                 }
+            },
+            {
+                "name": "Sesame",
+                "growthTime": "90-120",
+                "climate": "Warm",
+                "soilType": "Well-drained sandy loamy",
+                "waterRequirements": "Low",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://msamb.com"],
+                "uses": "Oilseed, flavoring",
+                "states": ["West Bengal", "Gujarat", "Tamil Nadu", "Andhra Pradesh", "Karnataka"],
+                "terms": "Til, Kharif & Summer Crop, Sesame Oil, Antioxidants",
+                 "marketPrice": 110,
+                 "links": {
+                     "Private Web - Amazon": "https://www.amazon.in/s?k=sesame+seeds"
+                 }
+            },
+            {
+                "name": "Nigerseed",
+                "growthTime": "120-150",
+                "climate": "Warm and dry",
+                "soilType": "Well-drained sandy loamy",
+                "waterRequirements": "Low",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://eagri.dac.gov.in"],
+                "uses": "Oilseed",
+                "states": ["Madhya Pradesh", "Odisha", "Maharashtra", "Karnataka", "Chhattisgarh"],
+                "terms": "Ramtil, Bird Feed, Cooking Oil",
+                 "marketPrice": 60,
+                 "links": {
+                     "Private Web - IndiaMART": "https://www.indiamart.com/impcat/niger-seeds.html"
+                 }
+            },
+            {
+                "name": "Linseed",
+                "growthTime": "120-150",
+                "climate": "Cool and dry",
+                "soilType": "Well-drained loamy",
+                "waterRequirements": "Low",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://msamb.com"],
+                "uses": "Oilseed, fiber",
+                "states": ["Madhya Pradesh", "Uttar Pradesh", "Maharashtra", "Bihar", "Chhattisgarh"],
+                "terms": "Alsi, Rabi crop, Flaxseed oil, Omega-3 fatty acids",
+                 "marketPrice": 50,
+                 "links": {
+                     "Private Web - Amazon": "https://www.amazon.in/s?k=flax+seeds"
+                 }
+            },
+            {
+                "name": "Castor",
+                "growthTime": "150-180",
+                "climate": "Warm and semi-arid",
+                "soilType": "Well-drained sandy loamy",
+                "waterRequirements": "Low",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://eagri.dac.gov.in"],
+                "uses": "Oilseed, industrial",
+                "states": ["Gujarat", "Rajasthan", "Andhra Pradesh", "Telangana", "Karnataka"],
+                "terms": "Castor oil, Ricinoleic acid, Industrial lubricant",
+                 "marketPrice": 55,
+                 "links": {
+                     "Private Web - Amazon": "https://www.amazon.in/s?k=castor+oil"
+                 }
+            },
+            {
+                "name": "Coconut",
+                "growthTime": "N/A",
+                "climate": "Warm and humid",
+                "soilType": "Sandy",
+                "waterRequirements": "High",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://coconutboard.gov.in"],
+                "uses": "Food, oilseed",
+                "states": ["Kerala", "Tamil Nadu", "Karnataka", "Andhra Pradesh", "Maharashtra"],
+                "terms": "Copra, Tender coconut water, Coir",
+                 "marketPrice": 30,
+                 "links": {
+                     "Government Web - Coconut Board": "http://coconutboard.gov.in",
+                     "Private Web - BigBasket": "https://www.bigbasket.com/pc/fruits-vegetables/coconut-products/"
+                 }
+            },
+            {
+                "name": "Arecanut",
+                "growthTime": "N/A",
+                "climate": "Warm and humid",
+                "soilType": "Laterite and red loamy",
+                "waterRequirements": "High",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://arecanut.nic.in"],
+                "uses": "Mouth freshener",
+                "states": ["Karnataka", "Kerala", "Assam", "Maharashtra", "Meghalaya"],
+                "terms": "Supari, Betel nut, Chewing",
+                 "marketPrice": 90,
+                  "links": {
+                    "Private Web - Amazon": "https://www.amazon.in/s?k=arecanut"
+                }
+            },
+            {
+                "name": "Cardamom",
+                "growthTime": "N/A",
+                "climate": "Warm and humid",
+                "soilType": "Well-drained loamy",
+                "waterRequirements": "High",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://spicesboard.org"],
+                "uses": "Spice",
+                "states": ["Kerala", "Karnataka", "Tamil Nadu"],
+                "terms": "Elaichi, Queen of Spices, Flavoring agent",
+                 "marketPrice": 1200,
+                 "links": {
+                    "Private Web - Amazon": "https://www.amazon.in/s?k=cardamom"
+                }
+            },
+            {
+                "name": "Black Pepper",
+                "growthTime": "N/A",
+                "climate": "Warm and humid",
+                "soilType": "Well-drained loamy",
+                "waterRequirements": "High",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://spicesboard.org"],
+                "uses": "Spice",
+                "states": ["Kerala", "Karnataka", "Tamil Nadu"],
+                "terms": "Piper nigrum, King of Spices, Flavoring agent",
+                 "marketPrice": 500,
+                  "links": {
+                     "Private Web - Amazon": "https://www.amazon.in/s?k=black+pepper"
+                 }
+            },
+            {
+                "name": "Ginger",
+                "growthTime": "210",
+                "climate": "Warm and humid",
+                "soilType": "Well-drained loamy",
+                "waterRequirements": "Medium",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://spicesboard.org"],
+                "uses": "Spice, flavoring",
+                "states": ["Kerala", "Meghalaya", "Karnataka", "Assam", "West Bengal"],
+                "terms": "Zingiber officinale, Rhizome, Flavoring agent",
+                 "marketPrice": 180,
+                 "links": {
+                     "Private Web - Amazon": "https://www.amazon.in/s?k=ginger"
+                 }
+            },
+            {
+                "name": "Turmeric",
+                "growthTime": "270",
+                "climate": "Warm and humid",
+                "soilType": "Well-drained loamy",
+                "waterRequirements": "Medium",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://spicesboard.org"],
+                "uses": "Spice, coloring agent",
+                "states": ["Telangana", "Maharashtra", "Tamil Nadu", "Karnataka", "Andhra Pradesh"],
+                "terms": "Curcuma longa, Rhizome, Coloring agent",
+                 "marketPrice": 120,
+                 "links": {
+                     "Private Web - Amazon": "https://www.amazon.in/s?k=turmeric"
+                 }
+            },
+            {
+                "name": "Cashew Nut",
+                "growthTime": "N/A",
+                "climate": "Warm and humid",
+                "soilType": "Sandy loamy and lateritic",
+                "waterRequirements": "Low",
+                "marketPriceRef": ["http://agmarknet.gov.in", "http://cashewindia.org"],
+                "uses": "Snack, ingredient",
+                "states": ["Maharashtra", "Kerala", "Tamil Nadu", "Andhra Pradesh", "Odisha"],
+                "terms": "Anacardium occidentale, Nut, Snack",
+                 "marketPrice": 700,
+                 "links": {
+                     "Private Web - Amazon": "https://www.amazon.in/s?k=cashew+nuts"
+                 }
+            }
+        ];
+
+        function filterCrops() {
+
+            const searchBar = document.getElementById("searchBar");
+            const query = searchBar.value.toLowerCase();
+            const cropListDiv = document.getElementById("cropList");
+            cropListDiv.innerHTML = ''; // Clear previous results
+
+            // Sort the crops alphabetically
+            const sortedCrops = cropsData.sort((a, b) => a.name.localeCompare(b.name));
+
+            sortedCrops.forEach((crop, index) => {  // Add index for numbering
+                if (crop.name.toLowerCase().includes(query)) {
+                    const cropDiv = document.createElement("div");
+                    cropDiv.className = "crop";
+
+                    let linksHTML = '';
+                    if (crop.links) {
+                        linksHTML = '<div class="website-links"><strong>Buy Online:</strong>';
+                        for (const site in crop.links) {
+                            linksHTML += `<a href="${crop.links[site]}" target="_blank">${site}</a>`;
+                        }
+                        linksHTML += '</div>';
+                    }
+
+                   cropDiv.innerHTML = `
+                        <h2>${index + 1}. ${crop.name}</h2>
+                        <p><strong>Growth Time:</strong> ${crop.growthTime}</p>
+                        <p><strong>Climate:</strong> ${crop.climate}</p>
+                        <p><strong>Soil Type:</strong> ${crop.soilType}</p>
+                        <p><strong>Water Requirements:</strong> ${crop.waterRequirements}</p>
+                        <p><strong>Uses:</strong> ${crop.uses}</p>
+                        <p><strong>Major States:</strong> ${crop.states.join(", ")}</p>
+                        <p><strong>Key Terms:</strong> ${crop.terms}</p>
+                        <p class="market-price">Market Price (₹/unit): ${crop.marketPrice}</p>
+                        ${linksHTML}
+                        <p><strong>Market Price Reference:</strong> ${crop.marketPriceRef.join(", ")}</p>
+                    `;
+                    cropListDiv.appendChild(cropDiv);
+                }
+            });
+        }
+
+        // Initial display of all crops
+        filterCrops();
+    </script>
+</body>
+</html>

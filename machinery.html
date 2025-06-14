@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comprehensive directory of farming machinery available in India">
+    <title>Indian Agricultural Machinery Directory</title>
+    <style>
+        :root {
+            --primary-color: #2c5f2d;
+            --secondary-color: #97bc62;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-container {
+            position: relative;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        #searchBar {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 25px;
+            font-size: 1.1rem;
+            transition: box-shadow 0.3s ease;
+        }
+
+        #searchBar:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(44, 95, 45, 0.3);
+        }
+
+        .machinery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        .machine-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .machine-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .machine-image {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .machine-details-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 90%;
+            z-index: 1000;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Agricultural Machinery Directory</h1>
+        
+        <div class="search-container">
+            <input type="text" 
+                   id="searchBar" 
+                   placeholder="Search farming equipment..."
+                   aria-label="Search farming equipment">
+        </div>
+
+        <div class="machinery-grid" id="machineryGrid"></div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="machine-details-modal" id="machineModal">
+        <button class="modal-close" id="closeModal">&times;</button>
+        <h2 id="modalTitle"></h2>
+        <img class="machine-image" id="modalImage" alt="Machine visual representation">
+        <div id="modalSpecs"></div>
+    </div>
+
+    <script>
+        const agriculturalMachinery = [
+            {
+                id: 1,
+                name: "Mahindra 575 DI XP Plus",
+                image: "images/Machinery images/575-DI-XP-PLUS-Desktop_1_1.webp",
+                specs: {
+                    power: "50 HP",
+                    engine: "3-cylinder DI",
+                    fuelType: "Diesel",
+                    transmission: "8F+2R synchromesh",
+                    weight: "1980 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹5.75 - ₹6.25 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 2,
+                name: "John Deere 5050 D",
+                image: "images/Machinery images/jhondeer5050_D.jpg",
+                specs: {
+                    power: "55 HP",
+                    engine: "JD 3029 4-stroke",
+                    fuelType: "Diesel",
+                    transmission: "Collar Shift 9F+3R",
+                    weight: "2100 kg",
+                    features: ["Constant Mesh", "Mechanical Steering", "Wet Disc Brakes"]
+                },
+                priceRange: "₹7.2 - ₹7.8 Lakh",
+                warranty: "3000 hours or 5 years"
+            },
+            {
+                id: 3,
+                name: "Swaraj 744 FE",
+                image: "images/Machinery images/swaraj 744 Fe.jpeg",
+                specs: {
+                    power: "45 HP",
+                    engine: "4-stroke, Direct Injection",
+                    fuelType: "Diesel",
+                    transmission: "8F+2R",
+                    weight: "1850 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹5.5 - ₹6.0 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 4,
+                name: "Tafe 45 DI Orchard",
+                image: "images/Machinery images/tafe 45 di orchard.jpeg",
+                specs: {
+                    power: "45 HP",
+                    engine: "3-cylinder DI",
+                    fuelType: "Diesel",
+                    transmission: "8F+2R",
+                    weight: "1750 kg",
+                    features: ["Compact Design", "Power Steering", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹5.0 - ₹5.5 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 5,
+                name: "Kubota MU4501",
+                image: "images/Machinery images/kubota mu4501.webp",
+                specs: {
+                    power: "45 HP",
+                    engine: "4-stroke, Water-cooled",
+                    fuelType: "Diesel",
+                    transmission: "6F+2R",
+                    weight: "1600 kg",
+                    features: ["Compact Design", "Power Steering", "Wet Disc Brakes"]
+                },
+                priceRange: "₹6.0 - ₹6.5 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 6,
+                name: "Escort Farmtrac 60",
+                image: "images/Machinery images/escort farmtrac.jpeg",
+                specs: {
+                    power: "60 HP",
+                    engine: "4-stroke, Direct Injection",
+                    fuelType: "Diesel",
+                    transmission: "8F+2R",
+                    weight: "2200 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹6.5 - ₹7.0 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 7,
+                name: "New Holland 3630 TX",
+                image: "images/Machinery images/New Holland 3630 TX.webp",
+                specs: {
+                    power: "55 HP",
+                    engine: "4-stroke, Turbocharged",
+                    fuelType: "Diesel",
+                    transmission: "8F+8R",
+                    weight: "2100 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹7.0 - ₹7.5 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 8,
+                name: "Eicher 380 Super DI",
+                image: "images/Machinery images/Eicher 380 Super DI.jpeg",
+                specs: {
+                    power: "38 HP",
+                    engine: "3-cylinder DI",
+                    fuelType: "Diesel",
+                    transmission: "8F+2R",
+                    weight: "1600 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹4.5 - ₹5.0 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 9,
+                name: "Force Orchard Plus",
+                image: "images/Machinery images/Force Orchard Plus.webp",
+                specs: {
+                    power: "35 HP",
+                    engine: "3-cylinder DI",
+                    fuelType: "Diesel",
+                    transmission: "6F+2R",
+                    weight: "1500 kg",
+                    features: ["Compact Design", "Power Steering", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹4.0 - ₹4.5 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 10,
+                name: "Captain 350 DI",
+                image: "images/Machinery images/Captain 350 DI.jpeg",
+                specs: {
+                    power: "35 HP",
+                    engine: "3-cylinder DI",
+                    fuelType: "Diesel",
+                    transmission: "6F+2R",
+                    weight: "1450 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹3.8 - ₹4.2 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 11,
+                name: "Preet 9090",
+                image: "images/Machinery images/Preet 9090.jpeg",
+                specs: {
+                    power: "90 HP",
+                    engine: "4-stroke, Turbocharged",
+                    fuelType: "Diesel",
+                    transmission: "12F+12R",
+                    weight: "3200 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹12.0 - ₹13.0 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 12,
+                name: "Sonalika DI 750",
+                image: "images/Machinery images/Sonalika DI 750.jpeg",
+                specs: {
+                    power: "50 HP",
+                    engine: "4-stroke, Direct Injection",
+                    fuelType: "Diesel",
+                    transmission: "8F+2R",
+                    weight: "1900 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹5.5 - ₹6.0 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 13,
+                name: "VST Shakti MT 224",
+                image: "images/Machinery images/VST Shakti MT 224.jpeg",
+                specs: {
+                    power: "22 HP",
+                    engine: "3-cylinder DI",
+                    fuelType: "Diesel",
+                    transmission: "6F+2R",
+                    weight: "1200 kg",
+                    features: ["Compact Design", "Power Steering", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹3.0 - ₹3.5 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 14,
+                name: "Indo Farm 3048 DI",
+                image: "images/Machinery images/Indo Farm 3048 DI.jpeg",
+                specs: {
+                    power: "48 HP",
+                    engine: "4-stroke, Direct Injection",
+                    fuelType: "Diesel",
+                    transmission: "8F+2R",
+                    weight: "1800 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹5.0 - ₹5.5 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 15,
+                name: "HMT 5911",
+                image: "images/Machinery images/HMT 5911.jpeg",
+                specs: {
+                    power: "45 HP",
+                    engine: "4-stroke, Direct Injection",
+                    fuelType: "Diesel",
+                    transmission: "8F+2R",
+                    weight: "1700 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹4.8 - ₹5.2 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 16,
+                name: "ACE DI 4500",
+                image: "images/Machinery images/ACE DI 4500.jpeg",
+                specs: {
+                    power: "45 HP",
+                    engine: "4-stroke, Direct Injection",
+                    fuelType: "Diesel",
+                    transmission: "8F+2R",
+                    weight: "1750 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹5.0 - ₹5.5 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 17,
+                name: "Standard 240 DI",
+                image: "images/Machinery images/Standard 240 DI.avif",
+                specs: {
+                    power: "40 HP",
+                    engine: "4-stroke, Direct Injection",
+                    fuelType: "Diesel",
+                    transmission: "8F+2R",
+                    weight: "1600 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹4.5 - ₹5.0 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 18,
+                name: "Dasmesh 9111",
+                image: "images/Machinery images/dasmesh-9100-self-propelled-combine-harvester-1533307.jpg",
+                specs: {
+                    power: "90 HP",
+                    engine: "4-stroke, Turbocharged",
+                    fuelType: "Diesel",
+                    transmission: "12F+12R",
+                    weight: "3100 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹12.0 - ₹13.0 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 19,
+                name: "KMW K-60",
+                image: "images/Machinery images/KMW K-60.jpg",
+                specs: {
+                    power: "60 HP",
+                    engine: "4-stroke, Direct Injection",
+                    fuelType: "Diesel",
+                    transmission: "8F+2R",
+                    weight: "2200 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹6.5 - ₹7.0 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 20,
+                name: "Landforce 350",
+                image: "images/Machinery images/Landforce 350.png",
+                specs: {
+                    power: "35 HP",
+                    engine: "4-stroke, Direct Injection",
+                    fuelType: "Diesel",
+                    transmission: "6F+2R",
+                    weight: "1500 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹4.0 - ₹4.5 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 21,
+                name: "Mahindra Yuvo 575 DI",
+                image: "images/Machinery images/Mahindra Yuvo 575 DI.jpeg",
+                specs: {
+                    power: "50 HP",
+                    engine: "3-cylinder DI",
+                    fuelType: "Diesel",
+                    transmission: "8F+2R",
+                    weight: "1980 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹5.75 - ₹6.25 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 22,
+                name: "John Deere 5310",
+                image: "images/Machinery images/John Deere 5310.jpeg",
+                specs: {
+                    power: "55 HP",
+                    engine: "4-stroke, Turbocharged",
+                    fuelType: "Diesel",
+                    transmission: "9F+3R",
+                    weight: "2100 kg",
+                    features: ["Power Steering", "Dual Clutch", "Oil Immersed Brakes"]
+                },
+                priceRange: "₹7.5 - ₹8.0 Lakh",
+                warranty: "2 years or 2000 hours"
+            },
+            {
+                id: 23,
+                name: "Wheel Hoe",
+                image: "images/Machinery images/Wheel Hoe.webp",
+                specs: {
+                    power: "Manual",
+                    engine: "N/A",
+                    fuelType: "N/A",
+                    transmission: "N/A",
+                    weight: "10 kg",
+                    features: ["Ergonomic Handle", "Adjustable Width", "Durable Blades"]
+                },
+                priceRange: "₹1,500 - ₹3,000",
+                warranty: "1 year"
+            },
+            {
+                id: 24,
+                name: "Seed Drill",
+                image: "images/Machinery images/Seed Drill.avif",
+                specs: {
+                    power: "Tractor PTO",
+                    engine: "N/A",
+                    fuelType: "N/A",
+                    transmission: "N/A",
+                    weight: "500 kg",
+                    features: ["Precision Seeding", "Adjustable Depth", "Multiple Rows"]
+                },
+                priceRange: "₹50,000 - ₹1,00,000",
+                warranty: "2 years"
+            },
+            {
+                id: 25,
+                name: "Rotavator",
+                image: "images/Machinery images/Rotavator.avif",
+                specs: {
+                    power: "Tractor PTO",
+                    engine: "N/A",
+                    fuelType: "N/A",
+                    transmission: "N/A",
+                    weight: "300 kg",
+                    features: ["Efficient Soil Tillage", "Adjustable Depth", "Durable Blades"]
+                },
+                priceRange: "₹40,000 - ₹80,000",
+                warranty: "2 years"
+            },
+            {
+                id: 26,
+                name: "Combine Harvester",
+                image: "images/Machinery images/Combine Harvester.jpeg",
+                specs: {
+                    power: "100 HP",
+                    engine: "4-stroke, Turbocharged",
+                    fuelType: "Diesel",
+                    transmission: "Hydraulic",
+                    weight: "5000 kg",
+                    features: ["Efficient Harvesting", "Grain Storage", "Adjustable Cutting Height"]
+                },
+                priceRange: "₹15,00,000 - ₹20,00,000",
+                warranty: "2 years or 2000 hours"
+            }
+        ];
+
+        const machineryGrid = document.getElementById('machineryGrid');
+        const searchBar = document.getElementById('searchBar');
+        const overlay = document.getElementById('overlay');
+        const machineModal = document.getElementById('machineModal');
+        const closeModal = document.getElementById('closeModal');
+
+        function renderMachinery(machines) {
+            machineryGrid.innerHTML = machines.map(machine => `
+                <article class="machine-card" role="article" 
+                         data-machine-id="${machine.id}" 
+                         aria-label="${machine.name} details">
+                    <img class="machine-image" 
+                         src="${machine.image}" 
+                         alt="${machine.name} product visual">
+                    <h3>${machine.name}</h3>
+                    <p>Power: ${machine.specs.power}</p>
+                    <p>Price: ${machine.priceRange}</p>
+                </article>
+            `).join('');
+
+            document.querySelectorAll('.machine-card').forEach(card => {
+                card.addEventListener('click', () => showMachineDetails(
+                    card.dataset.machineId
+                ));
+            });
+        }
+
+        function showMachineDetails(machineId) {
+            const machine = agriculturalMachinery.find(m => m.id == machineId);
+            if (!machine) return;
+
+            document.getElementById('modalTitle').textContent = machine.name;
+            document.getElementById('modalImage').src = machine.image;
+            
+            const specsHtml = `
+                <h3>Technical Specifications</h3>
+                <ul>
+                    ${Object.entries(machine.specs).map(([key, value]) => `
+                        <li><strong>${key}:</strong> ${
+                            Array.isArray(value) ? value.join(', ') : value
+                        }</li>
+                    `).join('')}
+                </ul>
+                <p><strong>Warranty:</strong> ${machine.warranty}</p>
+            `;
+
+            document.getElementById('modalSpecs').innerHTML = specsHtml;
+            machineModal.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+
+        function initEventListeners() {
+            searchBar.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = agriculturalMachinery.filter(machine =>
+                    machine.name.toLowerCase().includes(query) ||
+                    machine.specs.features.some(f => f.toLowerCase().includes(query))
+                );
+                renderMachinery(filtered);
+            });
+
+            overlay.addEventListener('click', () => {
+                machineModal.style.display = 'none';
+                overlay.style.display = 'none';
+            });
+
+            closeModal.addEventListener('click', () => {
+                machineModal.style.display = 'none';
+                overlay.style.display = 'none';
+            });
+        }
+
+        // Initialize application
+        function init() {
+            renderMachinery(agriculturalMachinery);
+            initEventListeners();
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fertilizers List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        #searchBar {
+            width: 80%;
+            padding: 10px;
+            margin: 20px auto;
+            display: block;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #fertilizerList {
+            list-style: none;
+            padding: 0;
+        }
+
+        .fertilizer {
+            padding: 15px;
+            border: 1px solid #ddd;
+            margin: 10px auto;
+            width: 80%;
+            text-align: left;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .fertilizer h2 {
+            margin: 5px 0;
+            color: #333;
+        }
+
+        .fertilizer p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        strong {
+            margin-right: 5px;
+        }
+
+        #reference {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .website-links {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .website-links a {
+            color: #007BFF;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .website-links a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Fertilizers Used in Daily Farming</h1>
+    <input type="text" id="searchBar" placeholder="Search fertilizers...">
+    <ul id="fertilizerList"></ul>
+
+    <p id="reference">
+        <strong>Reference:</strong> Information compiled from various agricultural resources and websites. Prices are estimates per kg and may vary.
+    </p>
+    <script>
+        const fertilizers = [
+            {
+                number: 1, name: "Urea", use: "High nitrogen for plant growth", ingredients: "Nitrogen (46%)", crops: "Wheat, Rice, Maize", examples: "Basmati Rice, Durum Wheat", price: 30.00,
+                links: {
+                    "Government Web - Department of Fertilizers": "https://www.fert.nic.in/",
+                    "Private Web - AgriKart": "https://www.agrikart.com/"
+                }
+            },
+            {
+                number: 2, name: "Ammonium Nitrate", use: "Boosts leafy growth", ingredients: "Nitrogen (33-34%)", crops: "Leafy Vegetables, Corn", examples: "Spinach, Barley", price: 35.00,
+                links: {
+                    "Government Web - e-Marketplace (GeM)": "https://www.gem.gov.in/",
+                    "Private Web - Ugaoo": "https://www.ugaoo.com/product/ammonium-nitrate-fertilizer-for-plants"
+                }
+            },
+            {
+                number: 3, name: "Ammonium Sulfate", use: "Provides sulfur & nitrogen", ingredients: "Nitrogen (21%), Sulfur (24%)", crops: "Rice, Sugarcane, Potatoes", examples: "Russet Potatoes", price: 40.00,
+                links: {
+                    "Private Web - Bighaat": "https://www.bighaat.com/products/ammonium-sulphate-fertilizer",
+                }
+            },
+            {
+                number: 4, name: "Calcium Nitrate", use: "Prevents calcium deficiency", ingredients: "Calcium (19%), Nitrogen (15%)", crops: "Tomatoes, Apples", examples: "Cherry Tomatoes, Fuji Apples", price: 45.00,
+                links: {
+                     "Private Web - Ugaoo": "https://www.ugaoo.com/product/calcium-nitrate-fertilizer-for-plants"
+                }
+            },
+            {
+                number: 5, name: "Potassium Nitrate", use: "Improves fruiting", ingredients: "Potassium (44%), Nitrogen (13%)", crops: "Bananas, Grapes", examples: "Thompson Grapes", price: 50.00,
+                links: {
+                    "Government Web - Rashtriya Chemicals": "https://www.rcfltd.com/",
+                    "Private Web - Amazon": "https://www.amazon.in/Green-Wonder-Potassium-Nitrate-Fertilizer/dp/B09LYF94NR"
+                }
+            },
+            {
+                number: 6, name: "DAP (Diammonium Phosphate)", use: "Promotes root development", ingredients: "Nitrogen (18%), Phosphorus (46%)", crops: "Wheat, Pulses", examples: "Lentils, Chickpeas", price: 55.00,
+                links: {
+                    "Government Web - IFFCO BAZAR": "https://www.iffcobazar.in/en/diammonium-phosphate-dap-fertiliser",
+                }
+            },
+            {
+                number: 7, name: "MAP (Monoammonium Phosphate)", use: "Provides phosphorus", ingredients: "Nitrogen (11%), Phosphorus (52%)", crops: "Corn, Barley", examples: "Sweet Corn, Barley", price: 60.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/Monoammonium-Phosphate-MAP-12-61-00-Fertilizer/dp/B0C618G4PT"
+                }
+            },
+            {
+                number: 8, name: "Superphosphate", use: "Supports flowering", ingredients: "Phosphorus (16-20%)", crops: "Flowers, Fruits", examples: "Roses, Strawberries", price: 65.00,
+                links: {
+                    "Private Web - Bighaat": "https://www.bighaat.com/products/single-super-phosphate-ssp"
+                }
+            },
+            {
+                number: 9, name: "Triple Superphosphate", use: "Boosts root growth", ingredients: "Phosphorus (44-46%)", crops: "Carrots, Onions", examples: "Red Onions, Baby Carrots", price: 70.00,
+                links: {
+                     "Private Web - Amazon": "https://www.amazon.in/Green-Wonder-Triple-Phosphate-Fertilizer/dp/B09LYDYR47" // Indicate not available
+                }
+            },
+            {
+                number: 10, name: "Muriate of Potash (MOP)", use: "Boosts potassium", ingredients: "Potassium (60%)", crops: "Bananas, Cotton", examples: "Banana Plantations, Cotton", price: 75.00,
+                links: {
+                    "Government Web - IFFCO BAZAR": "https://www.iffcobazar.in/en/muriate-of-potash-mop"
+                }
+            },
+             {
+                number: 11, name: "Sulfate of Potash (SOP)", use: "Low-chlorine potassium source", ingredients: "Potassium (50%), Sulfur (17%)", crops: "Tobacco, Vegetables", examples: "Tobacco Leaves, Tomatoes", price: 80.00,
+                links: {
+                     "Private Web - Amazon": "https://www.amazon.in/Sulfate-Potash-Fertilizer-Crops-Plants/dp/B0C2425524"
+                }
+            },
+             {
+                number: 12, name: "Magnesium Sulfate", use: "Provides magnesium", ingredients: "Magnesium (10%), Sulfur (13%)", crops: "Soybeans, Tomatoes", examples: "Cherry Tomatoes", price: 85.00,
+                links: {
+                     "Private Web - Ugaoo": "https://www.ugaoo.com/product/epsom-salt-for-plants-magnesium-sulphate"
+                }
+            },
+             {
+                number: 13, name: "Zinc Sulfate", use: "Prevents zinc deficiency", ingredients: "Zinc (21-36%)", crops: "Maize, Citrus Fruits", examples: "Sweet Corn, Oranges", price: 90.00,
+                links: {
+                     "Private Web - Amazon": "https://www.amazon.in/dp/B071KSH97M"
+                }
+            },
+             {
+                number: 14, name: "Ferrous Sulfate", use: "Iron source", ingredients: "Iron (19-20%)", crops: "Citrus Fruits, Wheat", examples: "Mandarin Orange, Durum Wheat", price: 95.00,
+                links: {
+                    "Private Web - Bighaat": "https://www.bighaat.com/products/ferrous-sulphate-heptahydrate-19-feso4-fertilizer"
+                }
+            },
+             {
+                number: 15, name: "Copper Sulfate", use: "Prevents copper deficiency", ingredients: "Copper (24%)", crops: "Coffee, Potatoes", examples: "Arabica Coffee, Russet Potatoes", price: 100.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/Gardens-Copper-Sulphate-250gms-Crystals/dp/B08544R2J3"
+                }
+            },
+             {
+                number: 16, name: "Boron Fertilizer", use: "Improves flowering", ingredients: "Boron (10-15%)", crops: "Apples, Grapes", examples: "Fuji Apples, Grapes", price: 105.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/Borax-Boron-20-Fertilizer-Plants/dp/B08K8F7DLQ"
+                }
+            },
+             {
+                number: 17, name: "Gypsum", use: "Improves soil structure", ingredients: "Calcium (22%), Sulfur (17%)", crops: "Peanuts, Cotton", examples: "Cotton Fields", price: 33.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/dp/B07XYWMH9H"
+                }
+            },
+             {
+                number: 18, name: "Lime", use: "Reduces soil acidity", ingredients: "Calcium Carbonate", crops: "Soybeans, Alfalfa", examples: "Alfalfa Fields", price: 37.00,
+                links: {
+                   "Private Web - Amazon": "https://www.amazon.in/dp/B08614363M"
+                }
+            },
+             {
+                number: 19, name: "Rock Phosphate", use: "Slow phosphorus release", ingredients: "Phosphorus (30-35%)", crops: "Tea, Coffee", examples: "Black Tea, Arabica Coffee", price: 43.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/dp/B07X5QQ554"
+                }
+            },
+             {
+                number: 20, name: "Bone Meal", use: "Organic phosphorus source", ingredients: "Phosphorus (15%), Calcium (20%)", crops: "Tomatoes, Roses", examples: "Cherry Tomatoes, Hybrid Roses", price: 47.00,
+                links: {
+                   "Private Web - Amazon": "https://www.amazon.in/dp/B07XYW5V1Y"
+                }
+            },
+             {
+                number: 21, name: "Compost", use: "Improves soil health", ingredients: "Organic matter, Microbes", crops: "Vegetables, Fruits", examples: "Tomatoes, Mangoes", price: 53.00,
+                links: {
+                    "Private Web - Ugaoo": "https://www.ugaoo.com/product/organic-compost-for-plants"
+                }
+            },
+             {
+                number: 22, name: "Farmyard Manure (FYM)", use: "Enhances soil fertility", ingredients: "Decomposed animal dung & plant waste", crops: "Paddy, Sugarcane", examples: "Basmati Rice, Sugarcane", price: 57.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/dp/B07X621G1P"
+                }
+            },
+             {
+                number: 23, name: "Vermicompost", use: "Organic nutrient supply", ingredients: "Worm-processed organic matter", crops: "Horticultural crops", examples: "Strawberries, Roses", price: 63.00,
+                links: {
+                    "Private Web - Ugaoo": "https://www.ugaoo.com/product/vermicompost-for-plants"
+                }
+            },
+             {
+                number: 24, name: "Green Manure", use: "Enriches soil nitrogen", ingredients: "Sunhemp, Dhaincha plants", crops: "Paddy, Pulses", examples: "Chickpeas, Lentils", price: 67.00,
+                links: {
+                   "Not Available": null
+                }
+            },
+             {
+                number: 25, name: "Seaweed Fertilizer", use: "Stimulates plant growth", ingredients: "Seaweed extract", crops: "Vegetables, Flowers", examples: "Spinach, Orchids", price: 73.00,
+                links: {
+                    "Private Web - Ugaoo": "https://www.ugaoo.com/product/seaweed-fertilizer-for-plants"
+                }
+            },
+             {
+                number: 26, name: "Biofertilizers (Rhizobium)", use: "Fixes atmospheric nitrogen", ingredients: "Rhizobium bacteria", crops: "Legumes, Pulses", examples: "Soybean, Groundnut", price: 77.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/dp/B09W965RJW"
+                }
+            },
+             {
+                number: 27, name: "Azospirillum", use: "Nitrogen-fixing bacteria", ingredients: "Azospirillum spp.", crops: "Maize, Wheat", examples: "Sweet Corn, Durum Wheat", price: 83.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/dp/B0C6N5NH7J"
+                }
+            },
+             {
+                number: 28, name: "Azotobacter", use: "Improves nitrogen levels", ingredients: "Azotobacter bacteria", crops: "Vegetables, Cotton", examples: "Carrots, Cotton", price: 87.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/Neer-Agro-Azotobacter-Bio-Fertilizer/dp/B09W5XG477"
+                }
+            },
+             {
+                number: 29, name: "Phosphobacteria", use: "Enhances phosphorus uptake", ingredients: "Phosphate solubilizing bacteria", crops: "Rice, Maize", examples: "Hybrid Rice, Sweet Corn", price: 93.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/dp/B0C6NS2TN3"
+                }
+            },
+             {
+                number: 30, name: "Potash Mobilizing Bacteria", use: "Improves potassium uptake", ingredients: "Bacillus spp.", crops: "Bananas, Sugarcane", examples: "Cavendish Banana, Sugarcane", price: 97.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/dp/B0C6NT56RW"
+                }
+            },
+             {
+                number: 31, name: "Sulfur Fertilizer", use: "Boosts oilseed quality", ingredients: "Sulfur compounds", crops: "Mustard, Groundnut", examples: "Yellow Mustard, Peanuts", price: 34.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/dp/B07X5TS616"
+                }
+            },
+             {
+                number: 32, name: "Silicon Fertilizer", use: "Enhances crop resistance", ingredients: "Silicon dioxide", crops: "Rice, Sugarcane", examples: "Paddy Rice, Sugarcane", price: 38.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/dp/B07ZL67555"
+                }
+            },
+             {
+                number: 33, name: "Humic Acid", use: "Enhances soil fertility", ingredients: "Humic substances", crops: "Wheat, Maize", examples: "Hard Red Wheat, Popcorn", price: 44.00,
+                links: {
+                    "Private Web - Ugaoo": "https://www.ugaoo.com/product/humic-acid-for-plants"
+                }
+            },
+             {
+                number: 34, name: "Fulvic Acid", use: "Improves nutrient absorption", ingredients: "Organic fulvic compounds", crops: "Fruits, Vegetables", examples: "Grapes, Tomatoes", price: 48.00,
+                links: {
+                   "Private Web - Amazon": "https://www.amazon.in/dp/B09W984PQ2"
+                }
+            },
+             {
+                number: 35, name: "Liquid Organic Fertilizer", use: "Provides quick nutrients", ingredients: "Organic extracts", crops: "Flowers, Fruits", examples: "Roses, Mangoes", price: 54.00,
+                links: {
+                   "Private Web - Amazon": "https://www.amazon.in/dp/B09W984PQ2"
+                }
+            },
+             {
+                number: 36, name: "Bone Char", use: "Phosphorus-rich organic fertilizer", ingredients: "Charred animal bones", crops: "Root vegetables, Fruits", examples: "Carrots, Apple Trees", price: 58.00,
+                links: {
+                   "Private Web - Amazon": "https://www.amazon.in/dp/B07XYW5V1Y"
+                }
+            },
+             {
+                number: 37, name: "Blood Meal", use: "Boosts nitrogen", ingredients: "Dried animal blood", crops: "Leafy Vegetables, Corn", examples: "Lettuce, Sweet Corn", price: 64.00,
+                links: {
+                    "Not Available": null
+                }
+            },
+             {
+                number: 38, name: "Fish Emulsion", use: "Rich in organic nitrogen", ingredients: "Decomposed fish", crops: "Vegetables, Flowers", examples: "Cabbage, Sunflowers", price: 68.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/dp/B07X621G1P"
+                }
+            },
+             {
+                number: 39, name: "Chicken Manure", use: "Organic nitrogen and phosphorus", ingredients: "Decomposed poultry waste", crops: "Tomatoes, Peppers", examples: "Bell Peppers, Cherry Tomatoes", price: 74.00,
+                links: {
+                   "Private Web - Amazon": "https://www.amazon.in/dp/B07X5T18WB"
+                }
+            },
+             {
+                number: 40, name: "Sheep Manure", use: "Improves soil organic matter", ingredients: "Decomposed sheep dung", crops: "Grapes, Orchards", examples: "Vineyard Grapes, Apple Orchards", price: 78.00,
+                links: {
+                    "Private Web - Amazon": "https://www.amazon.in/dp/B07X621G1P"
+                }
+            }
+        ];
+
+        const listElement = document.getElementById("fertilizerList");
+        const searchBar = document.getElementById("searchBar");
+
+        function displayFertilizers(items) {
+            listElement.innerHTML = "";
+            items.forEach(item => {
+                const li = document.createElement("li");
+                li.className = "fertilizer";
+
+                let linksHTML = '';
+                if (item.links) {
+                    linksHTML = '<div class="website-links"><strong>Buy Online:</strong>';
+                    let hasLinks = false;
+
+                    for (const site in item.links) {
+                        if (item.links[site] !== null) {
+                            linksHTML += `<a href="${item.links[site]}" target="_blank">${site}</a>`;
+                            hasLinks = true;
+                        } else {
+                            linksHTML += `${site}`;
+                            hasLinks = true;
+                        }
+                    }
+
+                    if (hasLinks) {
+                         linksHTML += '</div>';
+                    } else {
+                        linksHTML = '';
+                    }
+                }
+
+
+                li.innerHTML = `
+                    <h2>${item.number}. ${item.name}</h2>
+                    <p><strong>Use:</strong> ${item.use}</p>
+                    <p><strong>Ingredients:</strong> ${item.ingredients}</p>
+                    <p><strong>Best Crops:</strong> ${item.crops}</p>
+                    <p><strong>Examples:</strong> ${item.examples}</p>
+                    <p><strong>Price:</strong> ₹${item.price.toFixed(2)} per kg</p>
+                    ${linksHTML}
+                `;
+                listElement.appendChild(li);
+            });
+        }
+
+        searchBar.addEventListener("input", () => {
+            const query = searchBar.value.toLowerCase();
+            const filtered = fertilizers.filter(f => f.name.toLowerCase().includes(query));
+            displayFertilizers(filtered);
+        });
+
+        displayFertilizers(fertilizers);
+    </script>
+</body>
+</html>
+

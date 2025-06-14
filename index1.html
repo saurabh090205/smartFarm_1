@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AGRI SAHYAK</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <section class="header">
+      <nav>
+        <a href="index1.html"><img src="images/logo.webp" /></a>
+        <div class="nav-links" id="navLinks">
+          <i class="fa-solid fa-xmark" onclick="hideMenu()"></i>
+          <ul>
+            <li><a href="">HOME</a></li>
+            <li><a href="Contact.html">CONTACT</a></li>
+            <li><a href="About.html">ABOUT</a></li>
+            <li><button class="btnLogin-popup" onclick="showLoginPopup()">LOGIN</button></li>
+
+          </ul>
+        </div>
+        <i class="fa-solid fa-bars" onclick="showMenu()"></i>
+      </nav>
+      <div class="text-box">
+        <h1>Welcome! to Smart Farm Web</h1>
+        <h1>AI in Agriculture</h1>
+        <p>
+          AI has been increasingly used in more and more operations, and now we
+          plan to make it useful in Agriculture aswell
+        </p>
+        <a href="" class="hero-btn">Agricultural AI</a></br></br></br>
+      </div>
+
+
+<!-- Login/Register Popup -->
+<div class="cover_box">
+  <span class="icon-close"><ion-icon name="close-outline"></ion-icon></span>
+  <div class="form-box login">
+    <h2>Login</h2>
+    <form action="#">
+      <div class="input-box">
+        <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+        <input type="email" required>
+        <label>Email</label>
+      </div>
+      <div class="input-box">
+        <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+        <input type="password" required>
+        <label>password</label>
+      </div>
+      <div class="remember-forgot">
+        <label><input type="checkbox">Remember me</label>
+        <a href="#">Forgot Password??</a>
+      </div>
+      <button type="submit" class="btn">Login</button>
+      <div class="login-register">
+        <p>Don't have an Account?? <a href="#" class="register-link">Register</a>  </p>
+      </div>
+    </form>
+  </div>
+
+<!-- registration -->
+  <div class="form-box register">
+    <h2>Register</h2>
+    <form action="#">
+
+      <div class="input-box">
+        <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+        <input type="text" required>
+        <label>Username</label>
+      </div>
+
+      <div class="input-box">
+        <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+        <input type="email" required>
+        <label>Email</label>
+      </div>
+      <div class="input-box">
+        <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+        <input type="password" required>
+        <label>password</label>
+      </div>
+      <div class="remember-forgot">
+        <label><input type="checkbox">Agree to Terms and Conditions</label>
+        <a href="#">Forgot Password??</a>
+      </div>
+      <button type="submit" class="btn">Register</button>
+      <div class="login-register">
+        <p>Already have an Account?? <a href="#" class="login-link">Login</a>  </p>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="script.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</section>
+
+    <!-----Weather------>
+    <section class="weather">
+      <div class="row">
+        <a href="weather.html" class="weather-column">
+          <h3>Weather Report</h3>
+          <p>Click to see the Weather Report</p>
+        </a>
+        </div>
+      </div>
+    </section>
+
+    <!-------Disease Detection------->
+     <section class = "disease">
+      <div class ="row">
+        <a href="http://localhost:8501/" class = "weather-column">
+          <h2>Disease Detection</h2>
+          <p>Disease Detection</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Government Schemes -->
+    <section class="schemes">
+      <div class="row">
+        <a  href="schemes_2.html" class="weather-column">
+          <h3>Government Schemes</h3>
+          <p>Click to explore various agricultural government schemes</p>
+        </a>
+      </div>
+    </section>
+
+    <!-----Fertilizer_Prediction----->
+    <section class = "fert-prediction">
+      <div class ="row">
+        <a href="fert-predct.html" class = "fert-box">
+          <h2>Fertilizer Prediction</h2>
+          <p>By giving the soil type as Input we will predict a suitable fertilizer for your crops</p>
+        </a>
+      </div>
+    </section>
+
+
+    <!----necessites----->
+    <section class="necc">
+      <h1>Prices of Agricultural necessities</h1>
+      <div class="row">
+        <a href="crops (1).html" class="necc-link">
+        <div class="necc-col">
+          <img src="images/seeds.jpg" />
+          <div class="layer">
+            <h3>CROPS</h3>
+          </div>
+        </div>
+        </a>
+        <a href="machinery.html" class="necc-link">
+        <div class="necc-col">
+          <img src="images/machinery.jpg" />
+          <div class="layer">
+            <h3>MACHINERY</h3>
+          </div>
+        </div>
+        </a>
+        <a href="fertilizers (2).html" class="necc-link">
+        <div class="necc-col">
+          <img src="images/fertilizer.jpg" />
+          <div class="layer">
+            <h3>FERTILIZERS</h3>
+          </div>
+        </div>
+        </a> 
+      </div>
+    </section>
+
+   <!--------AGRI VIDEOS------>
+   <section class="videos">
+    <h1>AGRICULTURAL VIDEOS</h1>
+    <div class="row">
+      <div class="video-col">
+      <a href="https://www.youtube.com/watch?v=wougJaN_Ha0" target="_blank">
+          <img src="https://img.youtube.com/vi/wougJaN_Ha0/hqdefault.jpg" alt="Agricultural Video Thumbnail">
+      </a>        
+        <h4>Organic Agriculture</h4>
+      </div>
+      <div class="video-col">
+      <a href="https://www.youtube.com/watch?v=NKVil9liOrw" target="_blank">
+          <img src="https://img.youtube.com/vi/NKVil9liOrw/hqdefault.jpg" alt="Agricultural Video Thumbnail">
+      </a>
+        <h4>Use of Drones in Agriculture</h4>
+      </div>
+      <div class="video-col">
+      <a href="https://www.youtube.com/watch?v=i0CC_Keg25A" target="_blank">
+          <img src="https://img.youtube.com/vi/i0CC_Keg25A/hqdefault.jpg" alt="Agricultural Video Thumbnail">
+      </a>        
+        <h4>New tools for farming</h4>
+      </div>
+    </div>
+  </section>
+
+   
+    <!-----Testimonials------>
+    <section class="test">
+      <h1>Testimonials</h1>
+      <div class="row">
+        <div class="test-col">
+          <img src="images/saura.png" />
+          <div>
+            <p>BERY GOOD WEBSITRE</p>
+            <h3>Saurabh Agarwal</h3>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+        </div>
+        <div class="test-col">
+          <img src="images/atharv.png" />
+          <div>
+            <p>I WANT TO BUY DIS WEBSITE</p>
+            <h3>Atharv Patil</h3>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star-half-stroke"></i>
+          </div>
+        </div>
+        <div class="test-col">
+          <img src="images/adya.png" />
+          <div>
+            <p>I LOB THIS</p>
+            <h3>Aditya Disco</h3>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-regular fa-star"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!------Java Script for Toggle Menu in Mobile-->
+    <script>
+      var navLinks = document.getElementById("navLinks");
+      function showMenu() {
+        navLinks.style.right = "0";
+      }
+      function hideMenu() {
+        navLinks.style.right = "-200px";
+      }
+    </script>
+    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2025/01/25/14/20250125145829-6W8W7TT9.js"></script>
+  
+  </body>
+</html>

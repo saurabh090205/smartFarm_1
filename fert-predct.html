@@ -1,0 +1,162 @@
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Fertilizer Recommendation</title>
+  <link rel="stylesheet" href="styelf.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>Smart Fertilizer Recommendation System</h2>
+
+    <form id="fertilizerForm">
+      <label>Temperature  (in degree Celsius - हवेचा तापमान):</label>
+      <input type="number" name="Temperature" required>
+
+      <label>Moisture (in percentage (%) - मातीतील ओलावा):</label>
+      <input type="number" name="Moisture" required>
+
+      <label>Rainfall (in millimeters - पावसाचे प्रमाण):</label>
+      <input type="number" name="Rainfall" required>
+
+      <label>PH (range 0 to 14 - मातीचा आम्लता/क्षारता स्तर):</label>
+      <input type="number" step="0.1" name="PH" required>
+
+      <label>Nitrogen (in kg per hectare - नायट्रोजन प्रमाण):</label>
+      <input type="number" name="Nitrogen" required>
+
+      <label>Phosphorous (in kg per hectare - फॉस्फरस प्रमाण):</label>
+      <input type="number" name="Phosphorous" required>
+
+      <label>Potassium (in kg per hectare - पोटॅशियम प्रमाण):</label>
+      <input type="number" name="Potassium" required>
+
+      <label>Carbon (in percentage - मातीतील कार्बन टक्केवारी):</label>
+      <input type="number" name="Carbon" required>
+
+       <label>Soil Type (मातीचा प्रकार):</label>
+  <select name="Soil" required>
+    <option value="">-- माती निवडा / Select Soil Type --</option>
+    <option value="Acidic Soil">Acidic Soil (आम्लीय माती)</option>
+    <option value="Alkaline Soil">Alkaline Soil (क्षारीय माती)</option>
+    <option value="Loamy Soil">Loamy Soil (दुपद्र माती)</option>
+    <option value="Neutral Soil">Neutral Soil (न्यूट्रल माती)</option>
+    <option value="Peaty Soil">Peaty Soil (ह्यूमस माती)</option>
+  </select>
+
+
+   <label>Crop Name (पिकाचे नाव):</label>
+  <select name="Crop" required>
+    <option value="">-- पीक निवडा / Select Crop --</option>
+    <option value="Adzuki Beans">Adzuki Beans (अडझुकी बीन्स)</option>
+    <option value="Black gram">Black gram (उडीद)</option>
+    <option value="Chickpea">Chickpea (हरभरा)</option>
+    <option value="Coconut">Coconut (नारळ)</option>
+    <option value="Coffee">Coffee (कॉफी)</option>
+    <option value="Cotton">Cotton (कापूस)</option>
+    <option value="Ground Nut">Ground Nut (शेंगदाणा)</option>
+    <option value="Jute">Jute (पाटा)</option>
+    <option value="Kidney Beans">Kidney Beans (राजमा)</option>
+    <option value="Lentil">Lentil (मसूर)</option>
+    <option value="Moth Beans">Moth Beans (मटकी)</option>
+    <option value="Mung Bean">Mung Bean (मुग)</option>
+    <option value="Peas">Peas (मटार)</option>
+    <option value="Pigeon Peas">Pigeon Peas (तूर)</option>
+    <option value="Rubber">Rubber (रब्बर)</option>
+    <option value="Sugarcane">Sugarcane (ऊस)</option>
+    <option value="Tea">Tea (चहा)</option>
+    <option value="Tobacco">Tobacco (तमाखू)</option>
+    <option value="apple">Apple (सफरचंद)</option>
+    <option value="banana">Banana (केळी)</option>
+    <option value="grapes">Grapes (द्राक्षे)</option>
+    <option value="maize">Maize (मका)</option>
+    <option value="mango">Mango (आंबा)</option>
+    <option value="millet">Millet (बाजरी)</option>
+    <option value="muskmelon">Muskmelon (खरबूज)</option>
+    <option value="orange">Orange (संत्रा)</option>
+    <option value="papaya">Papaya (पपई)</option>
+    <option value="pomegranate">Pomegranate (डाळिंब)</option>
+    <option value="rice">Rice (तांदूळ)</option>
+    <option value="watermelon">Watermelon (कलिंगड)</option>
+    <option value="wheat">Wheat (गहू)</option>
+  </select>
+
+      <button type="submit">Get Recommendation</button>
+    </form>
+
+    <h3 id="result"></h3>
+  </div>
+
+  <script>
+    let csvData = [];
+
+    Papa.parse("fertilizer_data.csv", {
+      download: true,
+      header: true,
+      complete: function (results) {
+        csvData = results.data;
+      }
+    });
+
+    document.querySelectorAll('input[type=number]').forEach(input => {
+      input.addEventListener('wheel', function (event) {
+        event.preventDefault();
+      });
+    });
+
+    document.getElementById("fertilizerForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const input = Object.fromEntries(formData.entries());
+
+      let bestMatch = null;
+
+      csvData.some(row => {
+        try {
+          const temp = Math.abs(parseFloat(row.Temperature) - parseFloat(input.Temperature));
+          const moist = Math.abs(parseFloat(row.Moisture) * 100 - parseFloat(input.Moisture));
+          const rain = Math.abs(parseFloat(row.Rainfall) - parseFloat(input.Rainfall));
+          const ph = Math.abs(parseFloat(row.PH) - parseFloat(input.PH));
+          const n = Math.abs(parseFloat(row.Nitrogen) - parseFloat(input.Nitrogen));
+          const p = Math.abs(parseFloat(row.Phosphorous) - parseFloat(input.Phosphorous));
+          const k = Math.abs(parseFloat(row.Potassium) - parseFloat(input.Potassium));
+          const c = Math.abs(parseFloat(row.Carbon) * 100 - parseFloat(input.Carbon));
+
+          const soilMatch = row.Soil?.trim().toLowerCase() === input.Soil?.trim().toLowerCase();
+          const cropMatch = row.Crop?.trim().toLowerCase() === input.Crop?.trim().toLowerCase();
+
+          if (
+            temp <= 5 &&
+            moist <= 10 &&
+            rain <= 10 &&
+            ph <= 1 &&
+            n <= 3 &&
+            p <= 3 &&
+            k <= 3 &&
+            c <= 10 &&
+            soilMatch &&
+            cropMatch
+          ) {
+            bestMatch = row;
+            return true; // stop searching
+          }
+        } catch (err) {
+          console.error("Error comparing row:", err);
+        }
+        return false;
+      });
+
+      const resultDiv = document.getElementById("result");
+
+      if (bestMatch) {
+        resultDiv.innerHTML = `
+          <h3>🌾 Recommended Fertilizer:</h3>
+          <p><strong>${bestMatch.Fertilizer || "Not specified"}</strong></p>
+          <h4>📝 Remark:</h4>
+          <p>${bestMatch.Remark || "No remark available."}</p>
+        `;
+      } else {
+        resultDiv.innerHTML = "<p><strong>No matching data found. Please check your input values.</strong></p>";
+      }
+    });
+  </script>
+</body>
